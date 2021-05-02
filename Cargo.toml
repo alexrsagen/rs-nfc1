@@ -1,6 +1,6 @@
 [package]
 name = "nfc1"
-version = "0.1.1"
+version = "0.2.0"
 description = "Safe wrapper around nfc1-sys"
 authors = ["Alexander Sagen <alexander@sagen.me>"]
 repository = "https://github.com/alexrsagen/rs-nfc1"

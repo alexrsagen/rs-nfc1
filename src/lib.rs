@@ -26,38 +26,42 @@ pub use target::info as target_info;
 /// Safe error type representing the NFC_E* constants
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Error {
+	// rs-nfc1 errors
 	Malloc,
+	Undefined,
+	UndefinedModulationType,
+	NoDeviceFound,
+
+	// libnfc errors
 	Io,
-	Invarg,
-	Devnotsupp,
-	Notsuchdev,
-	Ovflow,
+	InvalidArgument,
+	DeviceNotSupported,
+	NoSuchDeviceFound,
+	BufferOverflow,
 	Timeout,
-	Opaborted,
-	Notimpl,
-	Tgreleased,
-	Rftrans,
-	Mfcauthfail,
+	OperationAborted,
+	NotImplemented,
+	TargetReleased,
+	RfTransmissionError,
+	MifareAuthFailed,
 	Soft,
 	Chip,
-	UndefinedModulationType,
-	Undefined,
 }
 
 impl From<c_int> for Error {
 	fn from(input: c_int) -> Self {
 		match input {
 			nfc1_sys::NFC_EIO => Self::Io,
-			nfc1_sys::NFC_EINVARG => Self::Invarg,
-			nfc1_sys::NFC_EDEVNOTSUPP => Self::Devnotsupp,
-			nfc1_sys::NFC_ENOTSUCHDEV => Self::Notsuchdev,
-			nfc1_sys::NFC_EOVFLOW => Self::Ovflow,
+			nfc1_sys::NFC_EINVARG => Self::InvalidArgument,
+			nfc1_sys::NFC_EDEVNOTSUPP => Self::DeviceNotSupported,
+			nfc1_sys::NFC_ENOTSUCHDEV => Self::NoSuchDeviceFound,
+			nfc1_sys::NFC_EOVFLOW => Self::BufferOverflow,
 			nfc1_sys::NFC_ETIMEOUT => Self::Timeout,
-			nfc1_sys::NFC_EOPABORTED => Self::Opaborted,
-			nfc1_sys::NFC_ENOTIMPL => Self::Notimpl,
-			nfc1_sys::NFC_ETGRELEASED => Self::Tgreleased,
-			nfc1_sys::NFC_ERFTRANS => Self::Rftrans,
-			nfc1_sys::NFC_EMFCAUTHFAIL => Self::Mfcauthfail,
+			nfc1_sys::NFC_EOPABORTED => Self::OperationAborted,
+			nfc1_sys::NFC_ENOTIMPL => Self::NotImplemented,
+			nfc1_sys::NFC_ETGRELEASED => Self::TargetReleased,
+			nfc1_sys::NFC_ERFTRANS => Self::RfTransmissionError,
+			nfc1_sys::NFC_EMFCAUTHFAIL => Self::MifareAuthFailed,
 			nfc1_sys::NFC_ESOFT => Self::Soft,
 			nfc1_sys::NFC_ECHIP => Self::Chip,
 			_ => Self::Undefined,

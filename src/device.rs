@@ -77,7 +77,7 @@ impl<'a> Device<'a> {
 
 		match unsafe { nfc_open(context.ptr, connstring_ptr).as_mut() } {
 			Some(ptr) => Ok(Self{ ptr }),
-			None => Err(Error::Malloc)
+			None => Err(Error::NoDeviceFound)
 		}
 	}
 
@@ -200,31 +200,43 @@ impl<'a> Device<'a> {
 		Ok((rx_buf, cycles))
 	}
 
-	pub fn initiator_transceive_bits(&mut self, tx: &[u8], rx_len: usize) -> Result<Vec<u8>> {
+	pub fn initiator_transceive_bits(&mut self, tx: &[u8], tx_bits: usize, rx_len: usize) -> Result<Vec<u8>> {
+		if tx_bits > tx.len() * 8 {
+			return Err(Error::BufferOverflow);
+		}
 		let mut rx_buf = vec![0u8; rx_len];
-		wrap_err(unsafe { nfc_initiator_transceive_bits(self.ptr, tx.as_ptr(), tx.len() as size_t, ptr::null(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, ptr::null_mut()) })?;
+		wrap_err(unsafe { nfc_initiator_transceive_bits(self.ptr, tx.as_ptr(), tx_bits as size_t, ptr::null(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, ptr::null_mut()) })?;
 		Ok(rx_buf)
 	}
 
-	pub fn initiator_transceive_bits_with_parity(&mut self, tx: &[u8], parity_tx: &[u8], rx_len: usize) -> Result<(Vec<u8>, Vec<u8>)> {
+	pub fn initiator_transceive_bits_with_parity(&mut self, tx: &[u8], tx_bits: usize, parity_tx: &[u8], rx_len: usize) -> Result<(Vec<u8>, Vec<u8>)> {
+		if tx_bits > tx.len() * 8 {
+			return Err(Error::BufferOverflow);
+		}
 		let mut rx_buf = vec![0u8; rx_len];
 		let mut rx_parity_buf = vec![0u8; rx_len];
-		wrap_err(unsafe { nfc_initiator_transceive_bits(self.ptr, tx.as_ptr(), tx.len() as size_t, parity_tx.as_ptr(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, rx_parity_buf.as_mut_ptr()) })?;
+		wrap_err(unsafe { nfc_initiator_transceive_bits(self.ptr, tx.as_ptr(), tx_bits as size_t, parity_tx.as_ptr(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, rx_parity_buf.as_mut_ptr()) })?;
 		Ok((rx_buf, rx_parity_buf))
 	}
 
-	pub fn initiator_transceive_bits_timed(&mut self, tx: &[u8], rx_len: usize) -> Result<(Vec<u8>, u32)> {
+	pub fn initiator_transceive_bits_timed(&mut self, tx: &[u8], tx_bits: usize, rx_len: usize) -> Result<(Vec<u8>, u32)> {
+		if tx_bits > tx.len() * 8 {
+			return Err(Error::BufferOverflow);
+		}
 		let mut rx_buf = vec![0u8; rx_len];
 		let mut cycles = 0u32;
-		wrap_err(unsafe { nfc_initiator_transceive_bits_timed(self.ptr, tx.as_ptr(), tx.len() as size_t, ptr::null(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, ptr::null_mut(), &mut cycles) })?;
+		wrap_err(unsafe { nfc_initiator_transceive_bits_timed(self.ptr, tx.as_ptr(), tx_bits as size_t, ptr::null(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, ptr::null_mut(), &mut cycles) })?;
 		Ok((rx_buf, cycles))
 	}
 
-	pub fn initiator_transceive_bits_with_parity_timed(&mut self, tx: &[u8], parity_tx: &[u8], rx_len: usize) -> Result<(Vec<u8>, Vec<u8>, u32)> {
+	pub fn initiator_transceive_bits_with_parity_timed(&mut self, tx: &[u8], tx_bits: usize, parity_tx: &[u8], rx_len: usize) -> Result<(Vec<u8>, Vec<u8>, u32)> {
+		if tx_bits > tx.len() * 8 {
+			return Err(Error::BufferOverflow);
+		}
 		let mut rx_buf = vec![0u8; rx_len];
 		let mut rx_parity_buf = vec![0u8; rx_len];
 		let mut cycles = 0u32;
-		wrap_err(unsafe { nfc_initiator_transceive_bits_timed(self.ptr, tx.as_ptr(), tx.len() as size_t, parity_tx.as_ptr(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, rx_parity_buf.as_mut_ptr(), &mut cycles) })?;
+		wrap_err(unsafe { nfc_initiator_transceive_bits_timed(self.ptr, tx.as_ptr(), tx_bits as size_t, parity_tx.as_ptr(), rx_buf.as_mut_ptr(), rx_buf.len() as size_t, rx_parity_buf.as_mut_ptr(), &mut cycles) })?;
 		Ok((rx_buf, rx_parity_buf, cycles))
 	}
 
@@ -256,12 +268,18 @@ impl<'a> Device<'a> {
 		Ok(rx_buf)
 	}
 
-	pub fn target_send_bits(&mut self, tx: &[u8]) -> Result<()> {
-		wrap_err(unsafe { nfc_target_send_bits(self.ptr, tx.as_ptr(), tx.len() as size_t, ptr::null_mut()) })
+	pub fn target_send_bits(&mut self, tx: &[u8], tx_bits: usize) -> Result<()> {
+		if tx_bits > tx.len() * 8 {
+			return Err(Error::BufferOverflow);
+		}
+		wrap_err(unsafe { nfc_target_send_bits(self.ptr, tx.as_ptr(), tx_bits as size_t, ptr::null_mut()) })
 	}
 
-	pub fn target_send_bits_with_parity(&mut self, tx: &[u8], parity_tx: &[u8]) -> Result<()> {
-		wrap_err(unsafe { nfc_target_send_bits(self.ptr, tx.as_ptr(), tx.len() as size_t, parity_tx.as_ptr()) })
+	pub fn target_send_bits_with_parity(&mut self, tx: &[u8], tx_bits: usize, parity_tx: &[u8]) -> Result<()> {
+		if tx_bits > tx.len() * 8 {
+			return Err(Error::BufferOverflow);
+		}
+		wrap_err(unsafe { nfc_target_send_bits(self.ptr, tx.as_ptr(), tx_bits as size_t, parity_tx.as_ptr()) })
 	}
 
 	pub fn target_receive_bits(&mut self, rx_len: usize) -> Result<Vec<u8>> {
