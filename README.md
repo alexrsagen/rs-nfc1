@@ -25,7 +25,7 @@ See the [`libnfc` wiki](https://github.com/nfc-tools/libnfc/wiki) or [`libnfc` 1
 
 ### Usage example
 ```rust
-extern crate nfc;
+extern crate nfc1 as nfc;
 
 fn main() -> nfc::Result<()> {
 	println!("libnfc v{}", nfc::version());
