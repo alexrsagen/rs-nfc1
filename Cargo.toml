@@ -1,0 +1,12 @@
+[package]
+name = "nfc1"
+version = "0.1.0"
+description = "Safe wrapper around nfc1-sys"
+authors = ["Alexander Sagen <alexander@sagen.me>"]
+repository = "https://github.com/alexrsagen/rs-nfc1"
+readme = "README.md"
+license = "MIT"
+edition = "2018"
+
+[dependencies]
+nfc1-sys = "0.1"
