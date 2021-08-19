@@ -16,7 +16,7 @@ In contrast to [`nfc`](https://github.com/dsgriffin/nfc), this crate additionall
 Add `nfc1` as a dependency in your project's `Cargo.toml` file:
 ```toml
 [dependencies]
-nfc1 = "0.1"
+nfc1 = "0.2"
 ```
 
 Import the `nfc1` crate in your project, then you can use all the wrapped functions from `libnfc`.
