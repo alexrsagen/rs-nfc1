@@ -13,6 +13,7 @@ use std::ffi::CStr;
 use std::os::raw::c_int;
 use std::time::Duration;
 use std::string::ToString;
+use std::io;
 
 mod target;
 mod context;
@@ -65,6 +66,33 @@ impl From<c_int> for Error {
 			nfc1_sys::NFC_ESOFT => Self::Soft,
 			nfc1_sys::NFC_ECHIP => Self::Chip,
 			_ => Self::Undefined,
+		}
+	}
+}
+
+impl From<Error> for io::Error {
+	fn from(input: Error) -> Self {
+		match input {
+			// rs-nfc1 errors
+			Error::Malloc => io::Error::from(io::ErrorKind::Interrupted),
+			Error::Undefined => io::Error::from(io::ErrorKind::Other),
+			Error::UndefinedModulationType => io::Error::from(io::ErrorKind::InvalidInput),
+			Error::NoDeviceFound => io::Error::from(io::ErrorKind::NotFound),
+
+			// libnfc errors
+			Error::Io => io::Error::from(io::ErrorKind::Other),
+			Error::InvalidArgument => io::Error::from(io::ErrorKind::InvalidInput),
+			Error::DeviceNotSupported => io::Error::from(io::ErrorKind::Other),
+			Error::NoSuchDeviceFound => io::Error::from(io::ErrorKind::NotFound),
+			Error::BufferOverflow => io::Error::from(io::ErrorKind::Other),
+			Error::Timeout => io::Error::from(io::ErrorKind::TimedOut),
+			Error::OperationAborted => io::Error::from(io::ErrorKind::Interrupted),
+			Error::NotImplemented => io::Error::from(io::ErrorKind::Other),
+			Error::TargetReleased => io::Error::from(io::ErrorKind::Other),
+			Error::RfTransmissionError => io::Error::from(io::ErrorKind::Interrupted),
+			Error::MifareAuthFailed => io::Error::from(io::ErrorKind::PermissionDenied),
+			Error::Soft => io::Error::from(io::ErrorKind::Other),
+			Error::Chip => io::Error::from(io::ErrorKind::Other),
 		}
 	}
 }
