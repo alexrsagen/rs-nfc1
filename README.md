@@ -1,7 +1,7 @@
 # nfc1
 [![Crates.io](https://img.shields.io/crates/v/nfc1)](https://crates.io/crates/nfc1)
 
-This crate provides a safe wrapper around [`nfc1-sys`](https://github.com/alexrsagen/nfc1-sys).
+This crate provides a safe wrapper around [`nfc1-sys`](https://github.com/alexrsagen/rs-nfc1-sys).
 
 In contrast to [`nfc`](https://github.com/dsgriffin/nfc), this crate additionally provides:
 - Extra safety
@@ -9,14 +9,14 @@ In contrast to [`nfc`](https://github.com/dsgriffin/nfc), this crate additionall
 	- No `.unwrap()` where the it is not guaranteed to succeed
 	- Enums for well-known constants
 - `Result<T, Error>` for methods which can fail
-- Everything  [`nfc1-sys`](https://github.com/alexrsagen/nfc1-sys) provides, which [`nfc-sys`](https://github.com/dsgriffin/nfc-sys) does not
+- Everything  [`nfc1-sys`](https://github.com/alexrsagen/rs-nfc1-sys) provides, which [`nfc-sys`](https://github.com/dsgriffin/nfc-sys) does not
 	- Some internal methods exposed (such as `pn53x_*`, which are useful for accessing manufacturer-specific features in NFC devices)
 
 ## Usage
 Add `nfc1` as a dependency in your project's `Cargo.toml` file:
 ```toml
 [dependencies]
-nfc1 = "0.2"
+nfc1 = "0.3"
 ```
 
 Import the `nfc1` crate in your project, then you can use all the wrapped functions from `libnfc`.
