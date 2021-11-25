@@ -29,7 +29,7 @@ pub use target::info as target_info;
 pub enum Error {
 	// rs-nfc1 errors
 	Malloc,
-	Undefined,
+	Undefined(c_int),
 	UndefinedModulationType,
 	NoDeviceFound,
 
@@ -65,7 +65,7 @@ impl From<c_int> for Error {
 			nfc1_sys::NFC_EMFCAUTHFAIL => Self::MifareAuthFailed,
 			nfc1_sys::NFC_ESOFT => Self::Soft,
 			nfc1_sys::NFC_ECHIP => Self::Chip,
-			_ => Self::Undefined,
+			_ => Self::Undefined(input),
 		}
 	}
 }
@@ -75,7 +75,7 @@ impl From<Error> for IoError {
 		match input {
 			// rs-nfc1 errors
 			Error::Malloc => IoError::from(ErrorKind::Interrupted),
-			Error::Undefined => IoError::from(ErrorKind::Other),
+			Error::Undefined(_) => IoError::from(ErrorKind::Other),
 			Error::UndefinedModulationType => IoError::from(ErrorKind::InvalidInput),
 			Error::NoDeviceFound => IoError::from(ErrorKind::NotFound),
 
@@ -102,7 +102,7 @@ impl std::fmt::Display for Error {
 		match self {
 			// rs-nfc1 errors
 			Error::Malloc => write!(f, "Memory allocation error"),
-			Error::Undefined => write!(f, "Unknown libnfc error"),
+			Error::Undefined(errno) => write!(f, "Unknown libnfc error: {}", errno),
 			Error::UndefinedModulationType => write!(f, "Undefined modulation type"),
 			Error::NoDeviceFound => write!(f, "No device found"),
 
