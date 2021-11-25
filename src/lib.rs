@@ -13,7 +13,7 @@ use std::ffi::CStr;
 use std::os::raw::c_int;
 use std::time::Duration;
 use std::string::ToString;
-use std::io;
+use std::io::{ErrorKind, Error as IoError};
 
 mod target;
 mod context;
@@ -70,32 +70,61 @@ impl From<c_int> for Error {
 	}
 }
 
-impl From<Error> for io::Error {
+impl From<Error> for IoError {
 	fn from(input: Error) -> Self {
 		match input {
 			// rs-nfc1 errors
-			Error::Malloc => io::Error::from(io::ErrorKind::Interrupted),
-			Error::Undefined => io::Error::from(io::ErrorKind::Other),
-			Error::UndefinedModulationType => io::Error::from(io::ErrorKind::InvalidInput),
-			Error::NoDeviceFound => io::Error::from(io::ErrorKind::NotFound),
+			Error::Malloc => IoError::from(ErrorKind::Interrupted),
+			Error::Undefined => IoError::from(ErrorKind::Other),
+			Error::UndefinedModulationType => IoError::from(ErrorKind::InvalidInput),
+			Error::NoDeviceFound => IoError::from(ErrorKind::NotFound),
 
 			// libnfc errors
-			Error::Io => io::Error::from(io::ErrorKind::Other),
-			Error::InvalidArgument => io::Error::from(io::ErrorKind::InvalidInput),
-			Error::DeviceNotSupported => io::Error::from(io::ErrorKind::Other),
-			Error::NoSuchDeviceFound => io::Error::from(io::ErrorKind::NotFound),
-			Error::BufferOverflow => io::Error::from(io::ErrorKind::Other),
-			Error::Timeout => io::Error::from(io::ErrorKind::TimedOut),
-			Error::OperationAborted => io::Error::from(io::ErrorKind::Interrupted),
-			Error::NotImplemented => io::Error::from(io::ErrorKind::Other),
-			Error::TargetReleased => io::Error::from(io::ErrorKind::Other),
-			Error::RfTransmissionError => io::Error::from(io::ErrorKind::Interrupted),
-			Error::MifareAuthFailed => io::Error::from(io::ErrorKind::PermissionDenied),
-			Error::Soft => io::Error::from(io::ErrorKind::Other),
-			Error::Chip => io::Error::from(io::ErrorKind::Other),
+			Error::Io => IoError::from(ErrorKind::Other),
+			Error::InvalidArgument => IoError::from(ErrorKind::InvalidInput),
+			Error::DeviceNotSupported => IoError::from(ErrorKind::Other),
+			Error::NoSuchDeviceFound => IoError::from(ErrorKind::NotFound),
+			Error::BufferOverflow => IoError::from(ErrorKind::Other),
+			Error::Timeout => IoError::from(ErrorKind::TimedOut),
+			Error::OperationAborted => IoError::from(ErrorKind::Interrupted),
+			Error::NotImplemented => IoError::from(ErrorKind::Other),
+			Error::TargetReleased => IoError::from(ErrorKind::Other),
+			Error::RfTransmissionError => IoError::from(ErrorKind::Interrupted),
+			Error::MifareAuthFailed => IoError::from(ErrorKind::PermissionDenied),
+			Error::Soft => IoError::from(ErrorKind::Other),
+			Error::Chip => IoError::from(ErrorKind::Other),
 		}
 	}
 }
+
+impl std::fmt::Display for Error {
+	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+		match self {
+			// rs-nfc1 errors
+			Error::Malloc => write!(f, "Memory allocation error"),
+			Error::Undefined => write!(f, "Unknown libnfc error"),
+			Error::UndefinedModulationType => write!(f, "Undefined modulation type"),
+			Error::NoDeviceFound => write!(f, "No device found"),
+
+			// libnfc errors
+			Error::Io => write!(f, "Input/output error, device may not be usable anymore without re-opening it"),
+			Error::InvalidArgument => write!(f, "Invalid argument(s)"),
+			Error::DeviceNotSupported => write!(f, "Operation not supported by device"),
+			Error::NoSuchDeviceFound => write!(f, "No such device found"),
+			Error::BufferOverflow => write!(f, "Buffer overflow"),
+			Error::Timeout => write!(f, "Operation timed out"),
+			Error::OperationAborted => write!(f, "Operation aborted (by user)"),
+			Error::NotImplemented => write!(f, "Not (yet) implemented"),
+			Error::TargetReleased => write!(f, "Target released"),
+			Error::RfTransmissionError => write!(f, "Error during RF transmission"),
+			Error::MifareAuthFailed => write!(f, "MIFARE Classic: authentication failed"),
+			Error::Soft => write!(f, "Software error (allocation, file/pipe creation, etc.)"),
+			Error::Chip => write!(f, "Device internal chip error"),
+		}
+	}
+}
+
+impl std::error::Error for Error {}
 
 pub type Result<T> = std::result::Result<T, Error>;
 
