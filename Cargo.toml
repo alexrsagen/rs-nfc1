@@ -1,12 +1,28 @@
 [package]
 name = "nfc1"
-version = "0.4.0"
+version = "0.4.1"
 description = "Safe wrapper around nfc1-sys"
 authors = ["Alexander Sagen <alexander@sagen.me>"]
 repository = "https://github.com/alexrsagen/rs-nfc1"
 readme = "README.md"
 license = "MIT"
-edition = "2018"
+edition = "2021"
+
+[features]
+vendored = ["nfc1-sys/vendored"]
+drivers = ["nfc1-sys/drivers"]
+logging = ["nfc1-sys/logging"]
+conffiles = ["nfc1-sys/conffiles"]
+envvars = ["nfc1-sys/envvars"]
+driver_pcsc = ["nfc1-sys/driver_pcsc"]
+driver_acr122_pcsc = ["nfc1-sys/driver_acr122_pcsc"]
+driver_acr122_usb = ["nfc1-sys/driver_acr122_usb"]
+driver_acr122s = ["nfc1-sys/driver_acr122s"]
+driver_arygon = ["nfc1-sys/driver_arygon"]
+driver_pn532_uart = ["nfc1-sys/driver_pn532_uart"]
+driver_pn53x_usb = ["nfc1-sys/driver_pn53x_usb"]
+default_drivers = ["nfc1-sys/default_drivers"]
+default = ["vendored", "drivers", "default_drivers"]
 
 [dependencies]
-nfc1-sys = "0.2"
+nfc1-sys = { version = "0.2", default-features = false }

@@ -1,4 +1,3 @@
-extern crate nfc1_sys;
 use nfc1_sys::{
 	size_t,
 	nfc_version,

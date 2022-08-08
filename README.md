@@ -25,17 +25,15 @@ See the [`libnfc` wiki](https://github.com/nfc-tools/libnfc/wiki) or [`libnfc` 1
 
 ### Usage example
 ```rust
-extern crate nfc1 as nfc;
+fn main() -> nfc1::Result<()> {
+	println!("libnfc v{}", nfc1::version());
 
-fn main() -> nfc::Result<()> {
-	println!("libnfc v{}", nfc::version());
-
-	let mut context = nfc::Context::new()?;
+	let mut context = nfc1::Context::new()?;
 	let mut device = context.open()?;
 
 	println!("NFC device {:?} opened through connection {:?}", device.name(), device.connstring());
-	println!("- Initiator modulations: {:?}", device.get_supported_modulation(nfc::Mode::Initiator)?);
-	println!("- Target modulations: {:?}", device.get_supported_modulation(nfc::Mode::Target)?);
+	println!("- Initiator modulations: {:?}", device.get_supported_modulation(nfc1::Mode::Initiator)?);
+	println!("- Target modulations: {:?}", device.get_supported_modulation(nfc1::Mode::Target)?);
 
 	Ok(())
 }
