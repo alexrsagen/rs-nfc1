@@ -1,7 +1,7 @@
 [package]
 name = "nfc1"
-version = "0.4.1"
-description = "Safe wrapper around nfc1-sys"
+version = "0.5.0"
+description = "High-level safe Rust bindings for libnfc."
 authors = ["Alexander Sagen <alexander@sagen.me>"]
 repository = "https://github.com/alexrsagen/rs-nfc1"
 readme = "README.md"
@@ -12,6 +12,7 @@ edition = "2021"
 vendored = ["nfc1-sys/vendored"]
 drivers = ["nfc1-sys/drivers"]
 logging = ["nfc1-sys/logging"]
+usb_logging = ["nfc1-sys/usb_logging"]
 conffiles = ["nfc1-sys/conffiles"]
 envvars = ["nfc1-sys/envvars"]
 driver_pcsc = ["nfc1-sys/driver_pcsc"]
@@ -25,4 +26,4 @@ default_drivers = ["nfc1-sys/default_drivers"]
 default = ["vendored", "drivers", "default_drivers"]
 
 [dependencies]
-nfc1-sys = { version = "0.2", default-features = false }
+nfc1-sys = { version = "0.3", default-features = false }

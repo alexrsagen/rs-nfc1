@@ -1,6 +1,8 @@
 # nfc1
 [![Crates.io](https://img.shields.io/crates/v/nfc1)](https://crates.io/crates/nfc1)
 
+High-level safe Rust bindings for libnfc.
+
 This crate provides a safe wrapper around [`nfc1-sys`](https://github.com/alexrsagen/rs-nfc1-sys).
 
 In contrast to [`nfc`](https://github.com/dsgriffin/nfc), this crate additionally provides:
@@ -16,7 +18,7 @@ In contrast to [`nfc`](https://github.com/dsgriffin/nfc), this crate additionall
 Add `nfc1` as a dependency in your project's `Cargo.toml` file:
 ```toml
 [dependencies]
-nfc1 = "0.4"
+nfc1 = "0.5"
 ```
 
 Import the `nfc1` crate in your project, then you can use all the wrapped functions from `libnfc`.
