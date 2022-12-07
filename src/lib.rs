@@ -134,6 +134,13 @@ pub(crate) fn wrap_err(res: c_int) -> Result<()> {
 	Ok(())
 }
 
+pub(crate) fn wrap_err_usize(res: c_int) -> Result<usize> {
+	if res < 0 {
+		return Err(res.into());
+	}
+	Ok(res as usize)
+}
+
 /// Safe version of the int values used for timeouts in libnfc
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Timeout {
