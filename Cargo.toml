@@ -9,21 +9,34 @@ license = "MIT"
 edition = "2021"
 
 [features]
-vendored = ["nfc1-sys/vendored"]
-drivers = ["nfc1-sys/drivers"]
-logging = ["nfc1-sys/logging"]
-usb_logging = ["nfc1-sys/usb_logging"]
-conffiles = ["nfc1-sys/conffiles"]
-envvars = ["nfc1-sys/envvars"]
-driver_pcsc = ["nfc1-sys/driver_pcsc"]
-driver_acr122_pcsc = ["nfc1-sys/driver_acr122_pcsc"]
-driver_acr122_usb = ["nfc1-sys/driver_acr122_usb"]
-driver_acr122s = ["nfc1-sys/driver_acr122s"]
-driver_arygon = ["nfc1-sys/driver_arygon"]
-driver_pn532_uart = ["nfc1-sys/driver_pn532_uart"]
-driver_pn53x_usb = ["nfc1-sys/driver_pn53x_usb"]
-default_drivers = ["nfc1-sys/default_drivers"]
+vendored = ["nfc1-sys/vendored", "mrtd1/vendored"]
+drivers = ["nfc1-sys/drivers", "mrtd1/drivers"]
+logging = ["nfc1-sys/logging", "mrtd1/logging"]
+usb_logging = ["nfc1-sys/usb_logging", "mrtd1/usb_logging"]
+conffiles = ["nfc1-sys/conffiles", "mrtd1/conffiles"]
+envvars = ["nfc1-sys/envvars", "mrtd1/envvars"]
+driver_pcsc = ["nfc1-sys/driver_pcsc", "mrtd1/driver_pcsc"]
+driver_acr122_pcsc = ["nfc1-sys/driver_acr122_pcsc", "mrtd1/driver_acr122_pcsc"]
+driver_acr122_usb = ["nfc1-sys/driver_acr122_usb", "mrtd1/driver_acr122_usb"]
+driver_acr122s = ["nfc1-sys/driver_acr122s", "mrtd1/driver_acr122s"]
+driver_arygon = ["nfc1-sys/driver_arygon", "mrtd1/driver_arygon"]
+driver_pn532_uart = ["nfc1-sys/driver_pn532_uart", "mrtd1/driver_pn532_uart"]
+driver_pn53x_usb = ["nfc1-sys/driver_pn53x_usb", "mrtd1/driver_pn53x_usb"]
+default_drivers = ["nfc1-sys/default_drivers", "mrtd1/default_drivers"]
 default = ["vendored", "drivers", "default_drivers"]
 
 [dependencies]
 nfc1-sys = { version = "0.3", default-features = false }
+
+[dev-dependencies]
+clap = { version = "3.2", features = ["derive"] }
+sha1 = "0.10"
+sha2 = "0.10"
+chrono = "0.4"
+mrtd1 = { version = "0.1", default-features = false }
+rand = "0.8"
+cbc = "0.1"
+des = "0.8"
+block-padding = "0.3"
+iso7816-tlv = "0.4"
+hex_fmt = "0.3"
