@@ -1,5 +1,4 @@
 use nfc1_sys::{
-	size_t,
 	nfc_version,
 	str_nfc_baud_rate,
 	str_nfc_modulation_type,
@@ -387,22 +386,22 @@ impl From<nfc1_sys::nfc_baud_rate> for DepMode {
 
 pub fn iso14443a_crc(data: &mut [u8]) -> Vec<u8> {
 	let mut crc = vec![0u8; 2];
-	unsafe { nfc_iso14443a_crc(data.as_mut_ptr(), data.len() as size_t, crc.as_mut_ptr()) };
+	unsafe { nfc_iso14443a_crc(data.as_mut_ptr(), data.len(), crc.as_mut_ptr()) };
 	crc
 }
 
 pub fn iso14443a_crc_append(data: &mut Vec<u8>) {
-	unsafe { nfc_iso14443a_crc_append(data.as_mut_ptr(), data.len() as size_t) }
+	unsafe { nfc_iso14443a_crc_append(data.as_mut_ptr(), data.len()) }
 }
 
 pub fn iso14443b_crc(data: &mut [u8]) -> Vec<u8> {
 	let mut crc = vec![0u8; 2];
-	unsafe { nfc_iso14443b_crc(data.as_mut_ptr(), data.len() as size_t, crc.as_mut_ptr()) };
+	unsafe { nfc_iso14443b_crc(data.as_mut_ptr(), data.len(), crc.as_mut_ptr()) };
 	crc
 }
 
 pub fn iso14443b_crc_append(data: &mut Vec<u8>) {
-	unsafe { nfc_iso14443b_crc_append(data.as_mut_ptr(), data.len() as size_t) }
+	unsafe { nfc_iso14443b_crc_append(data.as_mut_ptr(), data.len()) }
 }
 
 pub fn iso14443a_locate_historical_bytes(ats: &[u8]) -> Option<&[u8]> {

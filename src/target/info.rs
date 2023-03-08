@@ -1,5 +1,4 @@
 use crate::DepMode;
-use nfc1_sys::size_t;
 
 /// Safe version of nfc_iso14443a_info
 /// NFC ISO14443A tag (MIFARE) information
@@ -135,9 +134,9 @@ impl From<&Iso14443a> for nfc1_sys::nfc_iso14443a_info {
 		Self {
 			abtAtqa: info.atqa,
 			btSak: info.sak,
-			szUidLen: info.uid_len as size_t,
+			szUidLen: info.uid_len,
 			abtUid: info.uid,
-			szAtsLen: info.ats_len as size_t,
+			szAtsLen: info.ats_len,
 			abtAts: info.ats,
 		}
 	}
@@ -146,7 +145,7 @@ impl From<&Iso14443a> for nfc1_sys::nfc_iso14443a_info {
 impl From<&Felica> for nfc1_sys::nfc_felica_info {
 	fn from(info: &Felica) -> Self {
 		Self {
-			szLen: info.len as size_t,
+			szLen: info.len,
 			btResCode: info.res_code,
 			abtId: info.id,
 			abtPad: info.pad,
@@ -172,7 +171,7 @@ impl From<&Iso14443bi> for nfc1_sys::nfc_iso14443bi_info {
 			abtDIV: info.div,
 			btVerLog: info.ver_log,
 			btConfig: info.config,
-			szAtrLen: info.atr_len as size_t,
+			szAtrLen: info.atr_len,
 			abtAtr: info.atr,
 		}
 	}
@@ -216,7 +215,7 @@ impl From<&Dep> for nfc1_sys::nfc_dep_info {
 			szGB: if info.gb_len > 48 {
 				48
 			} else {
-				info.gb_len as size_t
+				info.gb_len
 			},
 			ndm: info.dep_mode.into(),
 		}
@@ -226,7 +225,7 @@ impl From<&Dep> for nfc1_sys::nfc_dep_info {
 impl From<&Barcode> for nfc1_sys::nfc_barcode_info {
 	fn from(info: &Barcode) -> Self {
 		Self {
-			szDataLen: info.data_len as size_t,
+			szDataLen: info.data_len,
 			abtData: info.data,
 		}
 	}

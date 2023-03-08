@@ -1,5 +1,5 @@
 use crate::{Error, Result, Device};
-use nfc1_sys::{size_t, nfc_context, nfc_connstring, nfc_init, nfc_exit, nfc_list_devices};
+use nfc1_sys::{nfc_context, nfc_connstring, nfc_init, nfc_exit, nfc_list_devices};
 use std::convert::TryInto;
 use std::ffi::CStr;
 use std::os::raw::c_char;
@@ -34,7 +34,7 @@ impl<'a> Context<'a> {
 	pub fn list_devices(&mut self, max: usize) -> Result<Vec<String>> {
 		let sized_array: nfc_connstring = vec![0 as c_char; 1024].try_into().map_err(|_| Error::Malloc)?;
 		let mut connstrings: Vec<nfc_connstring> = vec![sized_array; max];
-		let count = unsafe{ nfc_list_devices(self.ptr, connstrings.as_mut_ptr(), connstrings.len() as size_t) } as usize;
+		let count = unsafe{ nfc_list_devices(self.ptr, connstrings.as_mut_ptr(), connstrings.len()) } as usize;
 		connstrings.resize(count, sized_array);
 		Ok(connstrings.into_iter().map(|connstring| unsafe { CStr::from_ptr(connstring.as_ptr()) }.to_string_lossy().into_owned()).collect())
 	}
