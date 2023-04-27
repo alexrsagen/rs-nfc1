@@ -1,6 +1,6 @@
 [package]
 name = "nfc1"
-version = "0.5.1"
+version = "0.5.2"
 description = "High-level safe Rust bindings for libnfc."
 authors = ["Alexander Sagen <alexander@sagen.me>"]
 repository = "https://github.com/alexrsagen/rs-nfc1"

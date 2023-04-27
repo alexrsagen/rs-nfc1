@@ -14,15 +14,18 @@ use crate::{
 	wrap_err,
 	wrap_err_usize,
 };
+#[cfg(feature = "driver_pn53x_usb")]
+use nfc1_sys::{
+	pn53x_transceive,
+	pn53x_read_register,
+	pn53x_write_register,
+};
 use nfc1_sys::{
 	nfc_device,
 	nfc_open,
 	nfc_close,
 	nfc_strerror,
 	nfc_device_get_last_error,
-	pn53x_transceive,
-	pn53x_read_register,
-	pn53x_write_register,
 	nfc_abort_command,
 	nfc_idle,
 	nfc_initiator_init,
@@ -109,6 +112,7 @@ impl<'a> Device<'a> {
 
 	// NFC Device/Hardware manipulation
 
+	#[cfg(feature = "driver_pn53x_usb")]
 	pub fn pn53x_transceive(&mut self, tx: &[u8], mut rx_len: usize, timeout: Timeout) -> Result<Vec<u8>> {
 		let mut rx_buf = vec![0u8; rx_len];
 		rx_len = wrap_err_usize(unsafe { pn53x_transceive(self.ptr, tx.as_ptr(), tx.len(), rx_buf.as_mut_ptr(), rx_len, timeout.into()) })?;
@@ -116,12 +120,14 @@ impl<'a> Device<'a> {
 		Ok(rx_buf)
 	}
 
+	#[cfg(feature = "driver_pn53x_usb")]
 	pub fn pn53x_read_register(&mut self, register_address: u16) -> Result<u8> {
 		let mut value = 0u8;
 		wrap_err(unsafe { pn53x_read_register(self.ptr, register_address, &mut value) })?;
 		Ok(value)
 	}
 
+	#[cfg(feature = "driver_pn53x_usb")]
 	pub fn pn53x_write_register(&mut self, register_address: u16, symbol_mask: u8, value: u8) -> Result<()> {
 		wrap_err(unsafe { pn53x_write_register(self.ptr, register_address, symbol_mask, value) })
 	}
