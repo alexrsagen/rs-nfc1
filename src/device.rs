@@ -60,7 +60,7 @@ use std::time::Duration;
 use std::convert::TryInto;
 use std::mem::MaybeUninit;
 use std::os::raw::{c_char, c_int, c_void};
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
 use std::ptr;
 
 pub struct Device<'a> {
@@ -71,11 +71,10 @@ impl<'a> Device<'a> {
 	fn new_device(context: &'a mut Context, connstring: Option<&str>) -> Result<Self> {
 		let mut connstring_ptr = ptr::null_mut();
 		if let Some(connstring) = connstring {
-			let mut constring_fixed_size = ['\0' as c_char; 1024];
-			connstring.bytes()
-				.zip(constring_fixed_size.iter_mut())
-				.for_each(|(b, ptr)| *ptr = b as c_char);
-			connstring_ptr = constring_fixed_size.as_mut_ptr();
+			let mut connstring_bytes = Vec::from(connstring);
+			connstring_bytes.resize(1023, 0);
+			let connstring_cstring = unsafe { CString::from_vec_unchecked(connstring_bytes) };
+			connstring_ptr = connstring_cstring.into_raw();
 		}
 
 		match unsafe { nfc_open(context.ptr, connstring_ptr).as_mut() } {
