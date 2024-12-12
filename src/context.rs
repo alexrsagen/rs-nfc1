@@ -5,11 +5,13 @@ use std::ffi::CStr;
 use std::os::raw::c_char;
 use std::ptr;
 
-pub struct Context<'a> {
-	pub(crate) ptr: &'a mut nfc_context,
+pub struct Context {
+	pub(crate) ptr: *mut nfc_context,
 }
 
-impl<'a> Context<'a> {
+unsafe impl Send for Context {}
+
+impl Context {
 	pub fn new() -> Result<Self> {
 		match unsafe {
 			let mut p: *mut nfc_context = ptr::null_mut();
@@ -40,7 +42,7 @@ impl<'a> Context<'a> {
 	}
 }
 
-impl<'a> Drop for Context<'a> {
+impl Drop for Context {
 	fn drop(&mut self) {
 		unsafe { nfc_exit(self.ptr); }
 	}

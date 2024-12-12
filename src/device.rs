@@ -63,12 +63,14 @@ use std::os::raw::{c_char, c_int, c_void};
 use std::ffi::{CStr, CString};
 use std::ptr;
 
-pub struct Device<'a> {
-	ptr: &'a mut nfc_device,
+pub struct Device {
+	ptr: *mut nfc_device,
 }
 
-impl<'a> Device<'a> {
-	fn new_device(context: &'a mut Context, connstring: Option<&str>) -> Result<Self> {
+unsafe impl Send for Device {}
+
+impl Device {
+	fn new_device(context: &mut Context, connstring: Option<&str>) -> Result<Self> {
 		let mut connstring_ptr = ptr::null_mut();
 		if let Some(connstring) = connstring {
 			let mut connstring_bytes = Vec::from(connstring);
@@ -83,11 +85,11 @@ impl<'a> Device<'a> {
 		}
 	}
 
-	pub fn new(context: &'a mut Context) -> Result<Self> {
+	pub fn new(context: &mut Context) -> Result<Self> {
 		Self::new_device(context, None)
 	}
 
-	pub fn new_with_connstring(context: &'a mut Context, connstring: &str) -> Result<Self> {
+	pub fn new_with_connstring(context: &mut Context, connstring: &str) -> Result<Self> {
 		Self::new_device(context, Some(connstring))
 	}
 
@@ -390,7 +392,7 @@ impl<'a> Device<'a> {
 	}
 }
 
-impl<'a> Drop for Device<'a> {
+impl Drop for Device {
 	fn drop(&mut self) {
 		unsafe { nfc_close(self.ptr); }
 	}
