@@ -153,7 +153,7 @@ impl From<Timeout> for c_int {
 		match input {
 			Timeout::None => 0,
 			Timeout::Default => -1,
-			Timeout::Duration(duration) => duration.as_secs() as c_int,
+			Timeout::Duration(duration) => duration.as_millis() as c_int,
 		}
 	}
 }
@@ -165,7 +165,7 @@ impl From<c_int> for Timeout {
 		} else {
 			match input {
 				0 => Timeout::None,
-				secs => Timeout::Duration(Duration::from_secs(secs as u64)),
+				secs => Timeout::Duration(Duration::from_millis(secs as u64)),
 			}
 		}
 	}
