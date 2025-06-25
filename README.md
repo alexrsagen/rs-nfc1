@@ -8,11 +8,12 @@ This crate provides a safe wrapper around [`nfc1-sys`](https://github.com/alexrs
 In contrast to [`nfc`](https://github.com/dsgriffin/nfc), this crate additionally provides:
 - Extra safety
 	- No exposed raw pointers
-	- No `.unwrap()` where the it is not guaranteed to succeed
+	- No `.unwrap()` where it is not guaranteed to succeed
 	- Enums for well-known constants
 - `Result<T, Error>` for methods which can fail
 - Everything  [`nfc1-sys`](https://github.com/alexrsagen/rs-nfc1-sys) provides, which [`nfc-sys`](https://github.com/dsgriffin/nfc-sys) does not
-	- Some internal methods exposed (such as `pn53x_*`, which are useful for accessing manufacturer-specific features in NFC devices)
+	- Access to internal methods (such as `pn53x_*`), which are useful for accessing manufacturer-specific features in NFC devices
+	- Vendored submodule copy of `libnfc` (with build tweaks for `x86_64-pc-windows-msvc`), which means you don't have to separately install `libnfc` to use this crate. The vendoring is optional and can be disabled by removing the `vendored` feature.
 
 ## Usage
 Add `nfc1` as a dependency in your project's `Cargo.toml` file:
