@@ -27,3 +27,18 @@ default = ["vendored", "drivers", "default_drivers"]
 
 [dependencies]
 nfc1-sys = { version = "0.3", default-features = false }
+
+[[example]]
+name = "list_readers"
+path = "examples/list_readers.rs"
+required-features = []
+
+[[example]]
+name = "detect_magic_target"
+path = "examples/detect_magic_target.rs"
+required-features = []
+
+[[example]]
+name = "dl533n_cs_test_capabilities"
+path = "examples/dl533n_cs_test_capabilities.rs"
+required-features = ["driver_pn53x_usb"]

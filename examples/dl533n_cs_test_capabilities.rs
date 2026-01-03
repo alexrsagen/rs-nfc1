@@ -85,7 +85,7 @@ fn dl533n_init(device: &mut nfc1::Device) -> nfc1::Result<()> {
 	Ok(())
 }
 
-fn dl533n_connect<'a>(context: &'a mut nfc1::Context) -> BoxResult<nfc1::Device<'a>> {
+fn dl533n_connect(context: &mut nfc1::Context) -> BoxResult<nfc1::Device> {
 	let mut device = context.open()?;
 
 	print!("NFC reader: {} opened\n\n", device.name());
