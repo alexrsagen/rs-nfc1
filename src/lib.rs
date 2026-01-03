@@ -16,6 +16,8 @@ use std::io::{ErrorKind, Error as IoError};
 mod target;
 mod context;
 mod device;
+#[cfg(test)]
+mod test;
 
 pub use target::Target;
 pub use device::Device;
