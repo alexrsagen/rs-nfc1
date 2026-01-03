@@ -20,13 +20,16 @@ driver_acr122_pcsc = ["nfc1-sys/driver_acr122_pcsc"]
 driver_acr122_usb = ["nfc1-sys/driver_acr122_usb"]
 driver_acr122s = ["nfc1-sys/driver_acr122s"]
 driver_arygon = ["nfc1-sys/driver_arygon"]
+driver_pn532_i2c = ["nfc1-sys/driver_pn532_i2c"]
+driver_pn532_spi = ["nfc1-sys/driver_pn532_spi"]
 driver_pn532_uart = ["nfc1-sys/driver_pn532_uart"]
 driver_pn53x_usb = ["nfc1-sys/driver_pn53x_usb"]
+driver_pn71xx = ["nfc1-sys/driver_pn71xx"]
 default_drivers = ["nfc1-sys/default_drivers"]
 default = ["vendored", "drivers", "default_drivers"]
 
 [dependencies]
-nfc1-sys = { version = "0.3", default-features = false }
+nfc1-sys = { version = "^0.3.12", default-features = false }
 
 [[example]]
 name = "list_readers"
