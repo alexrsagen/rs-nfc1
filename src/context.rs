@@ -25,7 +25,7 @@ static NFC_DRIVERS: LazyLock<()> = LazyLock::new(|| {
 
 pub struct Context {
 	pub(crate) ptr: *mut nfc_context,
-	drivers: (),
+	_drivers: (),
 }
 
 unsafe impl Send for Context {}
@@ -36,8 +36,8 @@ impl Context {
 		if ptr.is_null() {
 			return Err(Error::Malloc);
 		}
-		let drivers = *NFC_DRIVERS;
-		Ok(Self { ptr, drivers })
+		let _drivers = *NFC_DRIVERS;
+		Ok(Self { ptr, _drivers })
 	}
 
 	// NFC Device/Hardware manipulation

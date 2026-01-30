@@ -1,6 +1,6 @@
 [package]
 name = "nfc1"
-version = "0.6.1"
+version = "0.7.0"
 description = "High-level safe Rust bindings for libnfc."
 authors = ["Alexander Sagen <alexander@sagen.me>"]
 repository = "https://github.com/alexrsagen/rs-nfc1"
@@ -29,7 +29,7 @@ default_drivers = ["nfc1-sys/default_drivers"]
 default = ["vendored", "drivers", "default_drivers"]
 
 [dependencies]
-nfc1-sys = { version = "^0.3.12", default-features = false }
+nfc1-sys = { version = "0.3", default-features = false }
 
 [[example]]
 name = "list_readers"

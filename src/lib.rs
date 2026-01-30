@@ -427,6 +427,6 @@ pub fn iso14443a_locate_historical_bytes(ats: &[u8]) -> Option<&[u8]> {
 }
 
 pub fn version() -> &'static str {
-	// XXX: Safe because nfc_version returns a constant string (#define)
+	// SAFETY: nfc_version returns a constant string (#define)
 	unsafe { CStr::from_ptr(nfc_version()) }.to_str().unwrap()
 }

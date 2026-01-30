@@ -318,15 +318,15 @@ impl Device {
 
 	// Special data accessors
 
-	pub fn name(&mut self) -> &'static str {
-		// XXX: Safe because nfc_device_get_name returns a struct member
-		// which is guaranteed to be initialized
+	pub fn name<'a>(&'a self) -> &'a str {
+		// SAFETY: nfc_device_get_name returns a struct member
+		//         which is guaranteed to be initialized and never modified
 		unsafe { CStr::from_ptr(nfc_device_get_name(self.ptr)) }.to_str().unwrap()
 	}
 
-	pub fn connstring(&mut self) -> &'static str {
-		// XXX: Safe because nfc_device_get_connstring returns a struct member
-		// which is guaranteed to be initialized
+	pub fn connstring<'a>(&'a self) -> &'a str {
+		// SAFETY: nfc_device_get_connstring returns a struct member
+		//         which is guaranteed to be initialized and never modified
 		unsafe { CStr::from_ptr(nfc_device_get_connstring(self.ptr)) }.to_str().unwrap()
 	}
 
@@ -334,8 +334,8 @@ impl Device {
 		let mut supported_mt = MaybeUninit::uninit();
 		wrap_err(unsafe { nfc_device_get_supported_modulation(self.ptr, mode.into(), supported_mt.as_mut_ptr()) })?;
 		unsafe {
-			// XXX: This should be safe, as nfc_device_get_supported_modulation should
-			// return a non-zero error code if supported_mt is not set
+			// SAFETY: nfc_device_get_supported_modulation should return
+			//         a non-zero error code if supported_mt is not set
 			let supported_mt_init = supported_mt.assume_init();
 			let mut supported_mt_vec = vec![];
 			let mut i = 0;
@@ -356,8 +356,8 @@ impl Device {
 			Mode::Target => wrap_err(unsafe { nfc_device_get_supported_baud_rate_target_mode(self.ptr, modulation_type.into(), supported_br.as_mut_ptr()) })?,
 		}
 		unsafe {
-			// XXX: This should be safe, as nfc_device_get_supported_baud_rate should
-			// return a non-zero error code if supported_br is not set
+			// SAFETY: nfc_device_get_supported_baud_rate should return
+			//         a non-zero error code if supported_br is not set
 			let supported_br_init = supported_br.assume_init();
 			let mut supported_br_vec = vec![];
 			let mut i = 0;
