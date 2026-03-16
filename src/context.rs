@@ -1,8 +1,7 @@
 use crate::{Error, Result, Device};
-use nfc1_sys::{nfc_connstring, nfc_context, nfc_context_free, nfc_context_new, nfc_init, nfc_list_devices};
+use nfc1_sys::{nfc_connstring, nfc_context, nfc_free, nfc_init, nfc_list_devices};
 use std::convert::TryInto;
-use std::ffi::CStr;
-use std::os::raw::c_char;
+use std::ffi::{CStr, c_void, c_char};
 use std::ptr;
 use std::sync::LazyLock;
 
@@ -19,7 +18,7 @@ static NFC_DRIVERS: LazyLock<()> = LazyLock::new(|| {
 	let mut p = ptr::null_mut();
 	unsafe {
 		nfc_init(&mut p);
-		nfc_context_free(p);
+		nfc_free(p as *mut c_void);
 	}
 });
 
@@ -32,7 +31,8 @@ unsafe impl Send for Context {}
 
 impl Context {
 	pub fn new() -> Result<Self> {
-		let ptr = unsafe { nfc_context_new() };
+		let mut ptr = ptr::null_mut();
+		unsafe { nfc_init(&mut ptr); }
 		if ptr.is_null() {
 			return Err(Error::Malloc);
 		}
@@ -61,6 +61,6 @@ impl Context {
 
 impl Drop for Context {
 	fn drop(&mut self) {
-		unsafe { nfc_context_free(self.ptr); }
+		unsafe { nfc_free(self.ptr as *mut c_void); }
 	}
 }

@@ -7,8 +7,7 @@ use nfc1_sys::{
 	iso14443b_crc as nfc_iso14443b_crc,
 	iso14443b_crc_append as nfc_iso14443b_crc_append,
 };
-use std::ffi::CStr;
-use std::os::raw::c_int;
+use std::ffi::{CStr, c_int};
 use std::time::Duration;
 use std::string::ToString;
 use std::io::{ErrorKind, Error as IoError};

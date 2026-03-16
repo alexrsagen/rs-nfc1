@@ -2,8 +2,7 @@ use crate::{Error, Result, Modulation, ModulationType, BaudRate, wrap_err};
 use nfc1_sys::str_nfc_target;
 use nfc1_sys::nfc_free;
 use std::convert::TryFrom;
-use std::os::raw::{c_char, c_void};
-use std::ffi::CStr;
+use std::ffi::{CStr, c_char, c_void};
 use std::ptr;
 
 pub mod info;

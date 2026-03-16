@@ -59,8 +59,7 @@ use nfc1_sys::{
 use std::time::Duration;
 use std::convert::TryInto;
 use std::mem::MaybeUninit;
-use std::os::raw::{c_char, c_int, c_void};
-use std::ffi::{CStr, CString};
+use std::ffi::{CStr, CString, c_char, c_int, c_void};
 use std::ptr;
 
 pub struct Device {
